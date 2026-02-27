@@ -1,4 +1,4 @@
-package com.example.kotlin_ex.di
+package com.example.kotlin_ex.app.di
 
 import com.example.kotlin_ex.data.datasource.FakeTodoLocalDataSource
 import com.example.kotlin_ex.data.datasource.TodoLocalDataSource
