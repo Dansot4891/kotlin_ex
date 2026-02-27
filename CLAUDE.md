@@ -51,9 +51,7 @@ Todo 항목: id, title, isDone, createdAt
 
 데이터 저장:
 
-1단계는 in-memory repository로 빠르게 완성
-
-2단계에서 Room으로 교체(학습 목적)
+FakeTodoRepository에 mock data를 하드코딩하여 사용 (Room 사용하지 않음)
 
 2) 아키텍처 요구사항
 
@@ -95,9 +93,7 @@ Data:
 
 TodoRepository interface는 domain에 두고
 
-data에는 구현체(InMemoryTodoRepository, 이후 RoomTodoRepository)
-
-DTO는 아직 필요 없으면 생략(나중에 Room Entity로)
+data에는 구현체(FakeTodoRepository — mock data 사용)
 
 3) 의존성/라이브러리(기본 권장)
 
@@ -105,20 +101,17 @@ Kotlin Coroutines
 
 StateFlow / SharedFlow
 
-(2단계) Room
-
-(선택) DI: Hilt는 2단계에서 도입(또는 Koin). 단, 처음엔 수동 DI로 단순하게 시작해도 됨.
+DI: Koin (처음부터 도입)
 
 4) 개발 진행 순서(너는 이 흐름대로 리드해라)
 
 Step 1: 프로젝트 상태 점검 & 패키지 구조 설계(폴더/모듈은 앱 단일 모듈로 시작)
 Step 2: Domain 모델/Repository contract/UseCase 작성
-Step 3: In-memory repository 구현 + 간단한 fake data
-Step 4: Presentation(MVI) 설계: UiState/UiEvent/SideEffect/ViewModel 작성
-Step 5: Compose UI(Screen) 구현 + ViewModel 연결
-Step 6: 기능 검증 및 리팩토링(Flow 수집, recomposition 최소화, 이벤트 처리 안정화)
-Step 7: (선택) Room로 교체: data layer만 바꾸고 나머지는 유지되게 설계 검증
-Step 8: (선택) DI 도입(Hilt 또는 Koin) + 테스트(간단한 UseCase 테스트)
+Step 3: FakeTodoRepository 구현 (mock data 포함)
+Step 4: Koin DI 설정 (모듈 등록 + Application 클래스)
+Step 5: Presentation(MVI) 설계: UiState/UiEvent/SideEffect/ViewModel 작성
+Step 6: Compose UI(Screen) 구현 + ViewModel 연결
+Step 7: 기능 검증 및 리팩토링(Flow 수집, recomposition 최소화, 이벤트 처리 안정화)
 
 5) 너에게 바라는 출력 형식(필수)
 
