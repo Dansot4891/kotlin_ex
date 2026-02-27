@@ -17,6 +17,10 @@ class FakeTodoLocalDataSource : TodoLocalDataSource {
 
     override fun getTodos(): Flow<List<TodoModel>> = todos.asStateFlow()
 
+    override suspend fun getTodoById(id: Long): TodoModel? {
+        return todos.value.firstOrNull { it.id == id }
+    }
+
     override suspend fun addTodo(todo: TodoModel) {
         val current = todos.value.toMutableList()
         current.add(todo)

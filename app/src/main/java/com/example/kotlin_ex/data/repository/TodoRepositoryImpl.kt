@@ -18,6 +18,10 @@ class TodoRepositoryImpl(
         }
     }
 
+    override suspend fun getTodoById(id: Long): Todo? {
+        return localDataSource.getTodoById(id)?.toDomain()
+    }
+
     override suspend fun addTodo(todo: Todo) {
         localDataSource.addTodo(todo.toData())
     }

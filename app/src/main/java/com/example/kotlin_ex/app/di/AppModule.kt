@@ -6,6 +6,7 @@ import com.example.kotlin_ex.data.repository.TodoRepositoryImpl
 import com.example.kotlin_ex.domain.repository.TodoRepository
 import com.example.kotlin_ex.domain.usecase.AddTodoUseCase
 import com.example.kotlin_ex.domain.usecase.DeleteTodoUseCase
+import com.example.kotlin_ex.domain.usecase.GetTodoByIdUseCase
 import com.example.kotlin_ex.domain.usecase.GetTodosUseCase
 import com.example.kotlin_ex.domain.usecase.ToggleTodoUseCase
 import dagger.Module
@@ -37,6 +38,11 @@ object AppModule {
     @Provides
     fun provideGetTodosUseCase(repository: TodoRepository): GetTodosUseCase {
         return GetTodosUseCase(repository)
+    }
+
+    @Provides
+    fun provideGetTodoByIdUseCase(repository: TodoRepository): GetTodoByIdUseCase {
+        return GetTodoByIdUseCase(repository)
     }
 
     @Provides
