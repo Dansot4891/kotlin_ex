@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.kotlin_ex.presentation.todo_list.screen.TodoScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.kotlin_ex.app.route.AppNavHost
 import com.example.kotlin_ex.ui.theme.Kotlin_exTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Kotlin_exTheme {
-                TodoScreen(viewModel = hiltViewModel())
+                AppNavHost(navController = rememberNavController())
             }
         }
     }

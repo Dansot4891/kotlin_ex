@@ -1,5 +1,6 @@
 package com.example.kotlin_ex.presentation.todo_list.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,7 +40,10 @@ import com.example.kotlin_ex.presentation.todo_list.state.TodoUiState
 import com.example.kotlin_ex.presentation.todo_list.viewmodel.TodoViewModel
 
 @Composable
-fun TodoScreen(viewModel: TodoViewModel) {
+fun TodoScreen(
+    viewModel: TodoViewModel,
+    onTodoClick: (Long) -> Unit = {}
+) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -91,6 +95,7 @@ fun TodoScreen(viewModel: TodoViewModel) {
                 items(filteredTodos, key = { it.id }) { todo ->
                     TodoItem(
                         todo = todo,
+                        onClick = { onTodoClick(todo.id) },
                         onToggle = { viewModel.onEvent(TodoUiEvent.OnToggleTodo(todo.id)) },
                         onDelete = { viewModel.onEvent(TodoUiEvent.OnDeleteTodo(todo.id)) }
                     )
@@ -152,12 +157,14 @@ private fun TodoFilterBar(
 @Composable
 private fun TodoItem(
     todo: Todo,
+    onClick: () -> Unit,
     onToggle: () -> Unit,
     onDelete: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
