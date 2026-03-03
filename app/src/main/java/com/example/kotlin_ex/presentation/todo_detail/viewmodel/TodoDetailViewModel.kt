@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kotlin_ex.domain.usecase.DeleteTodoUseCase
 import com.example.kotlin_ex.domain.usecase.GetTodoByIdUseCase
 import com.example.kotlin_ex.domain.usecase.ToggleTodoUseCase
+import com.example.kotlin_ex.presentation.common.CommonSideEffect
 import com.example.kotlin_ex.presentation.todo_detail.effect.TodoDetailSideEffect
 import com.example.kotlin_ex.presentation.todo_detail.event.TodoDetailUiEvent
 import com.example.kotlin_ex.presentation.todo_detail.state.TodoDetailUiState
@@ -58,15 +59,15 @@ class TodoDetailViewModel @Inject constructor(
             toggleTodoUseCase(todoId)
             val currentTodo = _uiState.value.todo ?: return@launch
             _uiState.update { it.copy(todo = currentTodo.copy(isDone = !currentTodo.isDone)) }
-            _sideEffect.send(TodoDetailSideEffect.ShowSnackbar("상태가 변경되었습니다"))
+            _sideEffect.send(TodoDetailSideEffect.Common(CommonSideEffect.ShowSnackbar("상태가 변경되었습니다")))
         }
     }
 
     private fun deleteTodo() {
         viewModelScope.launch {
             deleteTodoUseCase(todoId)
-            _sideEffect.send(TodoDetailSideEffect.ShowSnackbar("삭제되었습니다"))
-            _sideEffect.send(TodoDetailSideEffect.NavigateBack)
+            _sideEffect.send(TodoDetailSideEffect.Common(CommonSideEffect.ShowSnackbar("삭제되었습니다")))
+            _sideEffect.send(TodoDetailSideEffect.Common(CommonSideEffect.NavigateBack))
         }
     }
 }

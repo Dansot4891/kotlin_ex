@@ -7,6 +7,7 @@ import com.example.kotlin_ex.domain.usecase.AddTodoUseCase
 import com.example.kotlin_ex.domain.usecase.DeleteTodoUseCase
 import com.example.kotlin_ex.domain.usecase.GetTodosUseCase
 import com.example.kotlin_ex.domain.usecase.ToggleTodoUseCase
+import com.example.kotlin_ex.presentation.common.CommonSideEffect
 import com.example.kotlin_ex.presentation.todo_list.effect.TodoSideEffect
 import com.example.kotlin_ex.presentation.todo_list.event.TodoUiEvent
 import com.example.kotlin_ex.presentation.todo_list.state.TodoFilter
@@ -84,7 +85,7 @@ class TodoViewModel @Inject constructor(
         val title = _uiState.value.inputText.trim()
         if (title.isBlank()) {
             viewModelScope.launch {
-                _sideEffect.send(TodoSideEffect.ShowSnackbar("할 일을 입력해주세요"))
+                _sideEffect.send(TodoSideEffect.Common(CommonSideEffect.ShowSnackbar("할 일을 입력해주세요")))
             }
             return
         }
@@ -92,7 +93,7 @@ class TodoViewModel @Inject constructor(
         viewModelScope.launch {
             addTodoUseCase(Todo(id = nextId.incrementAndGet(), title = title))
             _uiState.update { it.copy(inputText = "") }
-            _sideEffect.send(TodoSideEffect.ShowSnackbar("추가되었습니다"))
+            _sideEffect.send(TodoSideEffect.Common(CommonSideEffect.ShowSnackbar("추가되었습니다")))
         }
     }
 
@@ -105,7 +106,7 @@ class TodoViewModel @Inject constructor(
     private fun deleteTodo(id: Long) {
         viewModelScope.launch {
             deleteTodoUseCase(id)
-            _sideEffect.send(TodoSideEffect.ShowSnackbar("삭제되었습니다"))
+            _sideEffect.send(TodoSideEffect.Common(CommonSideEffect.ShowSnackbar("삭제되었습니다")))
         }
     }
 }

@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.example.kotlin_ex.presentation.common.CommonSideEffect
 import com.example.kotlin_ex.presentation.todo_detail.effect.TodoDetailSideEffect
 import com.example.kotlin_ex.presentation.todo_detail.event.TodoDetailUiEvent
 import com.example.kotlin_ex.presentation.todo_detail.viewmodel.TodoDetailViewModel
@@ -48,11 +49,14 @@ fun TodoDetailScreen(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is TodoDetailSideEffect.ShowSnackbar -> {
-                    snackbarHostState.showSnackbar(effect.message)
-                }
-                is TodoDetailSideEffect.NavigateBack -> {
-                    onNavigateBack()
+                is TodoDetailSideEffect.Common -> when (effect.effect) {
+                    is CommonSideEffect.ShowSnackbar -> {
+                        snackbarHostState.showSnackbar(effect.effect.message)
+                    }
+                    is CommonSideEffect.ShowToast -> {}
+                    is CommonSideEffect.NavigateBack -> {
+                        onNavigateBack()
+                    }
                 }
             }
         }
