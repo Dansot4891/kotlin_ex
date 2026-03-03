@@ -12,6 +12,7 @@ import com.example.kotlin_ex.presentation.todo_list.event.TodoUiEvent
 import com.example.kotlin_ex.presentation.todo_list.state.TodoFilter
 import com.example.kotlin_ex.presentation.todo_list.state.TodoUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.concurrent.atomic.AtomicLong
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +30,8 @@ class TodoViewModel @Inject constructor(
     private val deleteTodoUseCase: DeleteTodoUseCase,
 ) : ViewModel() {
 
-    // --- State (BLoC의 state stream과 동일) ---
+    private val nextId = AtomicLong(0)
+
     private val _uiState = MutableStateFlow(TodoUiState())
     val uiState: StateFlow<TodoUiState> = _uiState.asStateFlow()
 
@@ -39,6 +41,16 @@ class TodoViewModel @Inject constructor(
 
     init {
         observeTodos()
+        initNextId()
+    }
+
+    private fun initNextId() {
+        viewModelScope.launch {
+            getTodosUseCase().collect { todos ->
+                val maxId = todos.maxOfOrNull { it.id } ?: 0
+                nextId.compareAndSet(0, maxId)
+            }
+        }
     }
 
     // --- Event 처리 (BLoC의 on<Event>와 동일) ---
@@ -78,8 +90,7 @@ class TodoViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val newId = (_uiState.value.todos.maxOfOrNull { it.id } ?: 0) + 1
-            addTodoUseCase(Todo(id = newId, title = title))
+            addTodoUseCase(Todo(id = nextId.incrementAndGet(), title = title))
             _uiState.update { it.copy(inputText = "") }
             _sideEffect.send(TodoSideEffect.ShowSnackbar("추가되었습니다"))
         }

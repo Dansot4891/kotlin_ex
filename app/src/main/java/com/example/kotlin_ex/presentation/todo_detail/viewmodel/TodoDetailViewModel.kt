@@ -56,7 +56,8 @@ class TodoDetailViewModel @Inject constructor(
     private fun toggleTodo() {
         viewModelScope.launch {
             toggleTodoUseCase(todoId)
-            loadTodo()
+            val currentTodo = _uiState.value.todo ?: return@launch
+            _uiState.update { it.copy(todo = currentTodo.copy(isDone = !currentTodo.isDone)) }
             _sideEffect.send(TodoDetailSideEffect.ShowSnackbar("상태가 변경되었습니다"))
         }
     }
