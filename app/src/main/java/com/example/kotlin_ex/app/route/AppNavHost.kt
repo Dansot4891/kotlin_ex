@@ -17,12 +17,7 @@ fun AppNavHost(navController: NavHostController) {
         startDestination = Route.TodoList.path
     ) {
         composable(Route.TodoList.path) {
-            TodoScreen(
-                viewModel = hiltViewModel(),
-                onTodoClick = { todoId ->
-                    navController.navigate(RoutePath.todoDetail(todoId))
-                }
-            )
+            TodoScreen(viewModel = hiltViewModel())
         }
 
         composable(
@@ -31,10 +26,7 @@ fun AppNavHost(navController: NavHostController) {
                 navArgument("todoId") { type = NavType.LongType }
             )
         ) {
-            TodoDetailScreen(
-                viewModel = hiltViewModel(),
-                onNavigateBack = { navController.popBackStack() }
-            )
+            TodoDetailScreen(viewModel = hiltViewModel())
         }
     }
 }

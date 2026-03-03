@@ -36,13 +36,12 @@ import com.example.kotlin_ex.presentation.common.CommonSideEffect
 import com.example.kotlin_ex.presentation.todo_detail.effect.TodoDetailSideEffect
 import com.example.kotlin_ex.presentation.todo_detail.event.TodoDetailUiEvent
 import com.example.kotlin_ex.presentation.todo_detail.viewmodel.TodoDetailViewModel
+import com.example.kotlin_ex.app.route.LocalNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoDetailScreen(
-    viewModel: TodoDetailViewModel,
-    onNavigateBack: () -> Unit
-) {
+fun TodoDetailScreen(viewModel: TodoDetailViewModel) {
+    val navController = LocalNavController.current
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -54,7 +53,7 @@ fun TodoDetailScreen(
                         snackbarHostState.showSnackbar(effect.effect.message)
                     }
                     is CommonSideEffect.ShowToast -> {}
-                    is CommonSideEffect.NavigateBack -> onNavigateBack()
+                    is CommonSideEffect.NavigateBack -> navController.popBackStack()
                 }
             }
         }
@@ -66,7 +65,7 @@ fun TodoDetailScreen(
             TopAppBar(
                 title = { Text("할 일 상세") },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로")
                     }
                 }

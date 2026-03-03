@@ -39,12 +39,12 @@ import com.example.kotlin_ex.presentation.todo_list.event.TodoUiEvent
 import com.example.kotlin_ex.presentation.todo_list.state.TodoFilter
 import com.example.kotlin_ex.presentation.todo_list.state.TodoUiState
 import com.example.kotlin_ex.presentation.todo_list.viewmodel.TodoViewModel
+import com.example.kotlin_ex.app.route.LocalNavController
+import com.example.kotlin_ex.app.route.RoutePath
 
 @Composable
-fun TodoScreen(
-    viewModel: TodoViewModel,
-    onTodoClick: (Long) -> Unit = {}
-) {
+fun TodoScreen(viewModel: TodoViewModel) {
+    val navController = LocalNavController.current
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -100,7 +100,7 @@ fun TodoScreen(
                 items(filteredTodos, key = { it.id }) { todo ->
                     TodoItem(
                         todo = todo,
-                        onClick = { onTodoClick(todo.id) },
+                        onClick = { navController.navigate(RoutePath.todoDetail(todo.id)) },
                         onToggle = { viewModel.onEvent(TodoUiEvent.OnToggleTodo(todo.id)) },
                         onDelete = { viewModel.onEvent(TodoUiEvent.OnDeleteTodo(todo.id)) }
                     )
