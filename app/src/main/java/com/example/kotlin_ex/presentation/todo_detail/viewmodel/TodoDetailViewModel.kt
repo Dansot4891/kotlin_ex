@@ -66,7 +66,6 @@ class TodoDetailViewModel @Inject constructor(
     private fun deleteTodo() {
         viewModelScope.launch {
             deleteTodoUseCase(todoId)
-            _sideEffect.send(TodoDetailSideEffect.Common(CommonSideEffect.ShowSnackbar("삭제되었습니다")))
             _sideEffect.send(TodoDetailSideEffect.Common(CommonSideEffect.NavigateBack))
         }
     }

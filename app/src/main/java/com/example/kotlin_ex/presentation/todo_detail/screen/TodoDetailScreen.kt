@@ -54,9 +54,7 @@ fun TodoDetailScreen(
                         snackbarHostState.showSnackbar(effect.effect.message)
                     }
                     is CommonSideEffect.ShowToast -> {}
-                    is CommonSideEffect.NavigateBack -> {
-                        onNavigateBack()
-                    }
+                    is CommonSideEffect.NavigateBack -> onNavigateBack()
                 }
             }
         }
